@@ -18,8 +18,8 @@ func main() {
 
 	r := gin.New()
 
-	r.POST("/order/process", orderController.ProcessOrder)
-	r.GET("/order/:orderId", orderController.GetOrder)
+	r.POST("/orders", orderController.ProcessOrder)
+	r.GET("/orders/:orderId", orderController.GetOrder)
 
 	r.Run(":8080")
 

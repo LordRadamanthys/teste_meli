@@ -48,7 +48,5 @@ func (o *OrderService) ProcessOrder(order request.OrderRequest,
 
 	id := o.OrdersOutputPort.SaveOrder(orderDomain)
 
-	// fmt.Println(orderDomain.Itens)
-
 	return id, nil
 }

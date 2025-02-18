@@ -14,15 +14,13 @@ func NewOrderRepository() *Orders {
 
 func (o *Orders) SaveOrder(order domain.OrderDomain) string {
 
-	// id := uuid.New().String()
 	o.Mu.Lock()
-	// o.Order[id] = order
 	id := o.NewOrderRegister(order)
 	o.Mu.Unlock()
 	return id
 }
 
-func (o *Orders) FindOrderById(orderId string) (*domain.OrderDomain, error) {
+func (o *Orders) FindOrderById(orderId string) (*OrdersEntity, error) {
 	o.Mu.Lock()
 	defer o.Mu.Unlock()
 	value, ok := o.Order[orderId]
@@ -30,5 +28,10 @@ func (o *Orders) FindOrderById(orderId string) (*domain.OrderDomain, error) {
 		return nil, fmt.Errorf("order with id %s not found", orderId)
 	}
 
-	return &value, nil
+	entity := &OrdersEntity{
+		ID:    orderId,
+		Order: value,
+	}
+
+	return entity, nil
 }

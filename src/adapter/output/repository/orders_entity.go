@@ -12,6 +12,11 @@ type Orders struct {
 	Order map[string]domain.OrderDomain `json:"order"`
 }
 
+type OrdersEntity struct {
+	ID    string             `json:"id"`
+	Order domain.OrderDomain `json:"order"`
+}
+
 func (od *Orders) NewOrderRegister(order domain.OrderDomain) string {
 	id := uuid.New().String()
 	od.Order[id] = order

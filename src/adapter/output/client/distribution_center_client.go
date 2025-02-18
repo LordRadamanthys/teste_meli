@@ -2,12 +2,14 @@ package client
 
 import (
 	"errors"
+	"os"
 
 	"github.com/LordRadamanthys/teste_meli/src/adapter/output/client/response"
+	"gopkg.in/yaml.v2"
 )
 
 type DistributionCenterClient struct {
-	DistributionCenters map[string][]string
+	DistributionCenters map[string][]string `yaml:"distribution_centers"`
 }
 
 func NewDistributionCenterClient() *DistributionCenterClient {
@@ -28,13 +30,24 @@ func (d *DistributionCenterClient) FindDistributionCenterByItemId(itemId string)
 
 // yaml
 func (d *DistributionCenterClient) LoadCDs() {
-	d.DistributionCenters = map[string][]string{
-		"123456": {"CD1", "CD2", "CD3"},
-		"123444": {"CD1", "CD2", "CD3"},
-		"122212": {"CD1", "CD2", "CD3"},
-		"122211": {"CD1", "CD2", "CD3"},
-		"122213": {"CD1", "CD2", "CD3"},
-		"122214": {"CD1", "CD2", "CD3"},
-		"123457": {"CD1", "CD2", "CD3"},
+	data, err := os.ReadFile("./configuration/db/db.yaml")
+	if err != nil {
+		d.DistributionCenters = loadFromMemory()
+	}
+
+	err = yaml.Unmarshal(data, &d)
+	if err != nil {
+		d.DistributionCenters = loadFromMemory()
+	}
+
+}
+
+func loadFromMemory() map[string][]string {
+
+	return map[string][]string{
+		"123456": {"CD1", "CD3"},
+		"123444": {"CD3"},
+		"122212": {"CD1"},
+		"122211": {"CD2", "CD3"},
 	}
 }
