@@ -26,6 +26,7 @@ func (d *DistributionCenterClient) FindDistributionCenterByItemId(itemId string)
 	}, nil
 }
 
+// yaml
 func (d *DistributionCenterClient) LoadCDs() {
 	d.DistributionCenters = map[string][]string{
 		"123456": {"CD1", "CD2", "CD3"},

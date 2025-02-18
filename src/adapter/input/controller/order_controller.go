@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/LordRadamanthys/teste_meli/src/adapter/input/request"
+	"github.com/LordRadamanthys/teste_meli/src/application/domain"
 	"github.com/LordRadamanthys/teste_meli/src/application/ports/input"
 	"github.com/gin-gonic/gin"
 )
@@ -27,7 +28,10 @@ func (oc *OrderController) ProcessOrder(c *gin.Context) {
 		return
 	}
 
-	orderId, err := oc.OrderService.ProcessOrder(request)
+	jobsChan := make(chan string, len(request.Itens))
+	resultChan := make(chan domain.ItemDomain, len(request.Itens))
+
+	orderId, err := oc.OrderService.ProcessOrder(request, jobsChan, resultChan)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

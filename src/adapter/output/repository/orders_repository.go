@@ -1,11 +1,9 @@
 package repository
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/LordRadamanthys/teste_meli/src/application/domain"
-	"github.com/google/uuid"
 )
 
 func NewOrderRepository() *Orders {
@@ -16,21 +14,21 @@ func NewOrderRepository() *Orders {
 
 func (o *Orders) SaveOrder(order domain.OrderDomain) string {
 
-	id := uuid.New().String()
-	o.mu.Lock()
-	o.Order[id] = order
-	o.mu.Unlock()
+	// id := uuid.New().String()
+	o.Mu.Lock()
+	// o.Order[id] = order
+	id := o.NewOrderRegister(order)
+	o.Mu.Unlock()
 	return id
 }
 
 func (o *Orders) FindOrderById(orderId string) (*domain.OrderDomain, error) {
-	o.mu.Lock()
-	defer o.mu.Unlock()
-	for key, order := range o.Order {
-		if key == orderId {
-			return &order, nil
-		}
+	o.Mu.Lock()
+	defer o.Mu.Unlock()
+	value, ok := o.Order[orderId]
+	if !ok {
+		return nil, fmt.Errorf("order with id %s not found", orderId)
 	}
 
-	return nil, errors.New(fmt.Sprintf("order with id %s not found", orderId))
+	return &value, nil
 }

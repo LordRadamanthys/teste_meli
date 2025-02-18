@@ -6,6 +6,6 @@ import (
 )
 
 type OrderInputPort interface {
-	ProcessOrder(request.OrderRequest) (string, error)
+	ProcessOrder(request request.OrderRequest, jobsChan chan string, resultChan chan domain.ItemDomain) (string, error)
 	FindOrder(idOrder string) (*domain.OrderDomain, error)
 }
