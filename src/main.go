@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/LordRadamanthys/teste_meli/src/adapter/input/controller"
@@ -13,11 +14,16 @@ import (
 	"github.com/LordRadamanthys/teste_meli/src/adapter/output/repository"
 	"github.com/LordRadamanthys/teste_meli/src/application/service/order"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+
+	if errEnv := godotenv.Load(".env"); errEnv != nil {
+		log.Fatal("error: ", errEnv)
+	}
 
 	ordersRepository := repository.NewOrderRepository()
 	distributionCenterClient := client.NewDistributionCenterClient()
@@ -40,16 +46,17 @@ func main() {
 		}
 	}()
 
-	log.Println("Server started on :8080")
+	log.Printf("Server started on %s", os.Getenv("PORT"))
 
-	<-quit
-	gracefulyShutdown(srv)
+	gracefullyShutdown(srv, quit)
 }
 
-func gracefulyShutdown(srv *http.Server) {
+func gracefullyShutdown(srv *http.Server, quit chan os.Signal) {
+	<-quit
 	log.Println("Shutting down server...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+
 	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {
@@ -57,4 +64,5 @@ func gracefulyShutdown(srv *http.Server) {
 	}
 
 	log.Println("Server exiting")
+	os.Exit(0)
 }

@@ -8,8 +8,8 @@ import (
 )
 
 type Orders struct {
-	Mu    sync.Mutex
-	Order map[string]domain.OrderDomain `json:"order"`
+	Mu     sync.Mutex
+	Orders map[string]domain.OrderDomain `json:"orders"`
 }
 
 type OrdersEntity struct {
@@ -19,6 +19,6 @@ type OrdersEntity struct {
 
 func (od *Orders) NewOrderRegister(order domain.OrderDomain) string {
 	id := uuid.New().String()
-	od.Order[id] = order
+	od.Orders[id] = order
 	return id
 }

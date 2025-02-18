@@ -8,7 +8,7 @@ import (
 
 func NewOrderRepository() *Orders {
 	return &Orders{
-		Order: make(map[string]domain.OrderDomain),
+		Orders: make(map[string]domain.OrderDomain),
 	}
 }
 
@@ -23,7 +23,7 @@ func (o *Orders) SaveOrder(order domain.OrderDomain) string {
 func (o *Orders) FindOrderById(orderId string) (*OrdersEntity, error) {
 	o.Mu.Lock()
 	defer o.Mu.Unlock()
-	value, ok := o.Order[orderId]
+	value, ok := o.Orders[orderId]
 	if !ok {
 		return nil, fmt.Errorf("order with id %s not found", orderId)
 	}

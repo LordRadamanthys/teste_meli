@@ -1,6 +1,7 @@
 package service
 
 import (
+	"log"
 	"sync"
 
 	"github.com/LordRadamanthys/teste_meli/src/application/domain"
@@ -20,6 +21,7 @@ func WorkerCds(jobs <-chan string, result chan<- domain.ItemDomain, dc output.Di
 	for item := range jobs {
 		centersList, err := dc.FindDistributionCenterByItemId(item)
 		if err != nil {
+			log.Printf("warn: %s", err.Error())
 			result <- domain.ItemDomain{ID: item, DistributionCenter: []string{""}, Processed: false}
 		} else {
 			result <- domain.ItemDomain{ID: item, DistributionCenter: centersList.AvailableDistributionCenter, Processed: true}

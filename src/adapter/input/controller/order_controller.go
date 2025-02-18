@@ -27,6 +27,10 @@ func (oc *OrderController) ProcessOrder(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	if err := request.ValidateRequest(); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	jobsChan := make(chan string, len(request.Itens))
 	resultChan := make(chan domain.ItemDomain, len(request.Itens))
@@ -49,7 +53,7 @@ func (oc *OrderController) GetOrder(c *gin.Context) {
 			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 			return
 		}
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

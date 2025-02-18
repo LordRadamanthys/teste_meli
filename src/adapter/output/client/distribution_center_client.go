@@ -1,7 +1,8 @@
 package client
 
 import (
-	"errors"
+	"fmt"
+	"log"
 	"os"
 
 	"github.com/LordRadamanthys/teste_meli/src/adapter/output/client/response"
@@ -20,7 +21,7 @@ func (d *DistributionCenterClient) FindDistributionCenterByItemId(itemId string)
 
 	value, ok := d.DistributionCenters[itemId]
 	if !ok {
-		return nil, errors.New("item not available")
+		return nil, fmt.Errorf("item with id %s not available", itemId)
 	}
 
 	return &response.DistributionCenterResponse{
@@ -28,18 +29,18 @@ func (d *DistributionCenterClient) FindDistributionCenterByItemId(itemId string)
 	}, nil
 }
 
-// yaml
 func (d *DistributionCenterClient) LoadCDs() {
 	data, err := os.ReadFile("./configuration/db/db.yaml")
 	if err != nil {
+		log.Printf("error: %s - loading CDs from memory", err.Error())
 		d.DistributionCenters = loadFromMemory()
 	}
 
 	err = yaml.Unmarshal(data, &d)
 	if err != nil {
+		log.Printf("error: %s - loading CDs from memory", err.Error())
 		d.DistributionCenters = loadFromMemory()
 	}
-
 }
 
 func loadFromMemory() map[string][]string {
