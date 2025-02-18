@@ -1,6 +1,9 @@
 package controller
 
 import (
+	"fmt"
+	"net/http"
+
 	"github.com/LordRadamanthys/teste_meli/src/adapter/input/request"
 	"github.com/LordRadamanthys/teste_meli/src/application/ports/input"
 	"github.com/gin-gonic/gin"
@@ -20,19 +23,31 @@ func (oc *OrderController) ProcessOrder(c *gin.Context) {
 	var request request.OrderRequest
 
 	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	response, err := oc.OrderService.ProcessOrder(request)
+	orderId, err := oc.OrderService.ProcessOrder(request)
 
 	if err != nil {
-		c.JSON(404, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(201, response)
+	c.JSON(http.StatusCreated, gin.H{"orderId": orderId})
 }
 
 func (oc *OrderController) GetOrder(c *gin.Context) {
+	orderId := c.Param("orderId")
 
+	response, err := oc.OrderService.FindOrder(orderId)
+	if err != nil {
+		if err.Error() == fmt.Sprintf("order with id %s not found", orderId) {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
 }

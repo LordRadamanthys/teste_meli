@@ -53,9 +53,6 @@ func (o *OrderService) ProcessOrder(order request.OrderRequest) (string, error) 
 		tempItens = append(tempItens, item)
 	}
 
-	fmt.Println(tempItens)
-	fmt.Println()
-
 	orderDomain.Itens = tempItens
 
 	id := o.OrdersOutputPort.SaveOrder(*orderDomain)
@@ -64,20 +61,25 @@ func (o *OrderService) ProcessOrder(order request.OrderRequest) (string, error) 
 
 	return id, nil
 }
+
 func (o *OrderService) FindOrder(idOrder string) (*domain.OrderDomain, error) {
 
-	return nil, nil
+	order, err := o.OrdersOutputPort.FindOrderById(idOrder)
+	if err != nil {
+		return nil, err
+	}
+	return order, nil
 }
 
 func workerCds(jobs <-chan string, result chan<- domain.ItemDomain, dc output.DistributionCenterOutputPort, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for item := range jobs {
-		value, err := dc.FindDistributionCenterByItemId(item)
+		centersList, err := dc.FindDistributionCenterByItemId(item)
 
 		if err != nil {
-			result <- domain.ItemDomain{ID: item, DistributionCenter: value.AvailableDistributionCenter, Processed: false}
+			result <- domain.ItemDomain{ID: item, DistributionCenter: []string{""}, Processed: false}
 		} else {
-			result <- domain.ItemDomain{ID: item, DistributionCenter: value.AvailableDistributionCenter, Processed: true}
+			result <- domain.ItemDomain{ID: item, DistributionCenter: centersList.AvailableDistributionCenter, Processed: true}
 		}
 
 	}
