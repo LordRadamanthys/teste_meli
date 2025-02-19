@@ -13,6 +13,7 @@ import (
 	"github.com/LordRadamanthys/teste_meli/src/adapter/output/client"
 	"github.com/LordRadamanthys/teste_meli/src/adapter/output/repository"
 	"github.com/LordRadamanthys/teste_meli/src/application/service/order"
+	"github.com/LordRadamanthys/teste_meli/src/configuration/metrics"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -33,6 +34,8 @@ func main() {
 	orderController := controller.NewOrderController(orderService)
 
 	r := gin.New()
+	r.Use(metrics.PrometheusMiddleware())
+
 	r.POST("/orders", orderController.ProcessOrder)
 	r.GET("/orders/:orderId", orderController.GetOrder)
 	r.GET("/metrics", gin.WrapH(promhttp.Handler()))

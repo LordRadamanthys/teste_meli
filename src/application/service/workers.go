@@ -11,8 +11,8 @@ import (
 
 func StartWorkers(jobsChan <-chan string, resultChan chan<- domain.ItemDomain, dc output.DistributionCenterOutputPort, wg *sync.WaitGroup) {
 	numWorkers := calculateWorkers(len(jobsChan))
+	metrics.OrdersProcessGoroutinesTotal.Add(float64(numWorkers))
 	for i := 0; i < numWorkers; i++ {
-		metrics.OrdersProcessGoroutinesTotal.Inc()
 		wg.Add(1)
 		go WorkerCds(jobsChan, resultChan, dc, wg)
 	}

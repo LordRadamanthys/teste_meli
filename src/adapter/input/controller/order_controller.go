@@ -7,6 +7,7 @@ import (
 	"github.com/LordRadamanthys/teste_meli/src/adapter/input/request"
 	"github.com/LordRadamanthys/teste_meli/src/application/domain"
 	"github.com/LordRadamanthys/teste_meli/src/application/ports/input"
+	"github.com/LordRadamanthys/teste_meli/src/configuration/metrics"
 	"github.com/gin-gonic/gin"
 )
 
@@ -41,6 +42,7 @@ func (oc *OrderController) ProcessOrder(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	metrics.OrdersProcessGoroutinesTotal.Set(0)
 	c.JSON(http.StatusCreated, gin.H{"orderId": orderId})
 }
 

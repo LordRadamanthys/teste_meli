@@ -10,20 +10,20 @@ var (
 			Name: "http_requests_total",
 			Help: "Total number of HTTP requests",
 		},
-		[]string{"method", "endpoint"},
+		[]string{"method", "endpoint", "status"},
 	)
 	HttpRequestDuration = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
 			Name: "http_request_duration_seconds",
 			Help: "Duration of HTTP requests in seconds",
 		},
-		[]string{"method", "endpoint"},
+		[]string{"method", "endpoint", "status"},
 	)
 
 	OrdersProcessGoroutinesTotal = prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Name: "orders_process_goroutines_total",
-			Help: "Total number of goroutines process orders",
+			Help: "Total number of workers process orders",
 		},
 	)
 
@@ -80,8 +80,3 @@ func init() {
 	prometheus.MustRegister(ItensTotal)
 	prometheus.MustRegister(TotalRequestDC)
 }
-
-// func RecordMetrics(method string, endpoint string, duration float64) {
-// 	httpRequestsTotal.WithLabelValues(method, endpoint).Inc()
-// 	httpRequestDuration.WithLabelValues(method, endpoint).Observe(duration)
-// }

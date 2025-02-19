@@ -48,6 +48,7 @@ func (o *OrderService) ProcessOrder(order request.OrderRequest,
 	orderDomain.Itens = tempItens
 
 	id := o.OrdersOutputPort.SaveOrder(orderDomain)
+	metrics.ItensTotal.Add(float64(len(tempItens)))
 	metrics.OrdersTotal.Inc()
 	return id, nil
 }

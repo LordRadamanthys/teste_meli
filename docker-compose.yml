@@ -2,26 +2,26 @@ version: '3.8'
 services:
   prometheus:
     image: prom/prometheus
-    container_name: prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    command: 
-      - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
       - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
     networks:
       - monitoring
 
   grafana:
     image: grafana/grafana
-    container_name: grafana
     ports:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
       - grafana-storage:/var/lib/grafana
-      - ./
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./provisioning/dashboards_json:/var/lib/grafana/dashboards
     networks:
       - monitoring
 
@@ -39,3 +39,6 @@ services:
 networks:
   monitoring:
     driver: bridge
+
+volumes:
+  grafana-storage:
