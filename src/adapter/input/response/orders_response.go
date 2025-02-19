@@ -3,13 +3,13 @@ package response
 import "github.com/LordRadamanthys/teste_meli/src/adapter/output/repository"
 
 type OrdersResponse struct {
-	Order_ID string        `json:"id"`
-	Itens    ItensResponse `json:"itens"`
+	OrderID string        `json:"id"`
+	Items   ItemsResponse `json:"items"`
 }
 
-type ItensResponse struct {
-	ProcessedItens    []Item `json:"processed_itens"`
-	NotProcessedItens []Item `json:"not_processed_itens,omitempty"`
+type ItemsResponse struct {
+	ProcessedItems    []Item `json:"processed_items"`
+	NotProcessedItems []Item `json:"not_processed_items,omitempty"`
 }
 
 type Item struct {
@@ -17,16 +17,16 @@ type Item struct {
 	DistributionCenter []string `json:"distribution_center"`
 }
 
-func NewResponse(order *repository.OrdersEntity, notProcessedItens []Item,
-	processedItens []Item, idOrder string) *OrdersResponse {
+func NewResponse(order *repository.OrdersEntity, notProcessedItems []Item,
+	processedItems []Item, idOrder string) *OrdersResponse {
 
-	for _, value := range order.Order.Itens {
+	for _, value := range order.Order.Items {
 		if !value.Processed {
-			notProcessedItens = append(notProcessedItens, Item{
+			notProcessedItems = append(notProcessedItems, Item{
 				ID: value.ID,
 			})
 		} else {
-			processedItens = append(processedItens, Item{
+			processedItems = append(processedItems, Item{
 				ID:                 value.ID,
 				DistributionCenter: value.DistributionCenter,
 			})
@@ -34,10 +34,10 @@ func NewResponse(order *repository.OrdersEntity, notProcessedItens []Item,
 	}
 
 	response := &OrdersResponse{
-		Order_ID: idOrder,
-		Itens: ItensResponse{
-			ProcessedItens:    processedItens,
-			NotProcessedItens: notProcessedItens,
+		OrderID: idOrder,
+		Items: ItemsResponse{
+			ProcessedItems:    processedItems,
+			NotProcessedItems: notProcessedItems,
 		},
 	}
 	return response

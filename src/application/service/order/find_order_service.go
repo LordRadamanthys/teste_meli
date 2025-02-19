@@ -13,9 +13,9 @@ func (o *OrderService) FindOrder(idOrder string) (*response.OrdersResponse, erro
 		return nil, err
 	}
 
-	processedItens := []response.Item{}
-	notProcessedItens := []response.Item{}
+	processedItems := []response.Item{}
+	notProcessedItems := []response.Item{}
 
-	response := response.NewResponse(order, notProcessedItens, processedItens, idOrder)
+	response := response.NewResponse(order, notProcessedItems, processedItems, idOrder)
 	return response, nil
 }

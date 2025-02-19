@@ -24,22 +24,22 @@ func WorkerCds(jobs <-chan string, result chan<- domain.ItemDomain, dc output.Di
 		centersList, err := dc.FindDistributionCenterByItemId(item)
 		if err != nil {
 			log.Printf("warn: %s", err.Error())
-			metrics.UnprocessedItensTotal.Inc()
+			metrics.UnprocessedItemsTotal.Inc()
 			result <- domain.ItemDomain{ID: item, DistributionCenter: []string{""}, Processed: false}
 		} else {
-			metrics.ProcessedItensTotal.Inc()
+			metrics.ProcessedItemsTotal.Inc()
 			result <- domain.ItemDomain{ID: item, DistributionCenter: centersList.AvailableDistributionCenter, Processed: true}
 		}
 	}
 }
 
-func calculateWorkers(numItens int) int {
+func calculateWorkers(numItems int) int {
 	switch {
-	case numItens <= 5:
+	case numItems <= 5:
 		return 1
-	case numItens <= 20:
+	case numItems <= 20:
 		return 2
-	case numItens <= 50:
+	case numItems <= 50:
 		return 5
 	default:
 		return 10

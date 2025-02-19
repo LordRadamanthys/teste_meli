@@ -54,12 +54,12 @@
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
       "targets": [
         {
-          "expr": "processed_itens_total",
+          "expr": "processed_items_total",
           "legendFormat": "Processed",
           "refId": "D"
         },
         {
-          "expr": "unprocessed_itens_total",
+          "expr": "unprocessed_items_total",
           "legendFormat": "Unprocessed",
           "refId": "E"
         }

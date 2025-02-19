@@ -33,8 +33,8 @@ func (oc *OrderController) ProcessOrder(c *gin.Context) {
 		return
 	}
 
-	jobsChan := make(chan string, len(request.Itens))
-	resultChan := make(chan domain.ItemDomain, len(request.Itens))
+	jobsChan := make(chan string, len(request.Items))
+	resultChan := make(chan domain.ItemDomain, len(request.Items))
 
 	orderId, err := oc.OrderService.ProcessOrder(request, jobsChan, resultChan)
 

@@ -32,7 +32,7 @@ func (o *OrderService) ProcessOrder(order request.OrderRequest,
 
 	service.StartWorkers(jobsChan, resultChan, o.DistributionCenterOutputPort, &wg)
 
-	for _, item := range orderDomain.Itens {
+	for _, item := range orderDomain.Items {
 		jobsChan <- item.ID
 	}
 
@@ -40,15 +40,15 @@ func (o *OrderService) ProcessOrder(order request.OrderRequest,
 	wg.Wait()
 	close(resultChan)
 
-	var tempItens []domain.ItemDomain
+	var tempItems []domain.ItemDomain
 	for item := range resultChan {
-		tempItens = append(tempItens, item)
+		tempItems = append(tempItems, item)
 	}
 
-	orderDomain.Itens = tempItens
+	orderDomain.Items = tempItems
 
 	id := o.OrdersOutputPort.SaveOrder(orderDomain)
-	metrics.ItensTotal.Add(float64(len(tempItens)))
+	metrics.ItemsTotal.Add(float64(len(tempItems)))
 	metrics.OrdersTotal.Inc()
 	return id, nil
 }

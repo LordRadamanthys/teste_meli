@@ -27,24 +27,24 @@ var (
 		},
 	)
 
-	UnprocessedItensTotal = prometheus.NewGauge(
+	UnprocessedItemsTotal = prometheus.NewGauge(
 		prometheus.GaugeOpts{
-			Name: "unprocessed_itens_total",
-			Help: "Total number of itens not processed",
+			Name: "unprocessed_items_total",
+			Help: "Total number of items not processed",
 		},
 	)
 
-	ProcessedItensTotal = prometheus.NewGauge(
+	ProcessedItemsTotal = prometheus.NewGauge(
 		prometheus.GaugeOpts{
-			Name: "processed_itens_total",
-			Help: "Total number of itens processed",
+			Name: "processed_items_total",
+			Help: "Total number of items processed",
 		},
 	)
 
-	ItensTotal = prometheus.NewGauge(
+	ItemsTotal = prometheus.NewGauge(
 		prometheus.GaugeOpts{
-			Name: "itens_total",
-			Help: "Total number of itens",
+			Name: "items_total",
+			Help: "Total number of items",
 		},
 	)
 
@@ -73,10 +73,10 @@ func init() {
 	prometheus.MustRegister(HttpRequestsTotal)
 	prometheus.MustRegister(HttpRequestDuration)
 	prometheus.MustRegister(OrdersProcessGoroutinesTotal)
-	prometheus.MustRegister(UnprocessedItensTotal)
-	prometheus.MustRegister(ProcessedItensTotal)
+	prometheus.MustRegister(UnprocessedItemsTotal)
+	prometheus.MustRegister(ProcessedItemsTotal)
 	prometheus.MustRegister(NotFoundOrders)
 	prometheus.MustRegister(OrdersTotal)
-	prometheus.MustRegister(ItensTotal)
+	prometheus.MustRegister(ItemsTotal)
 	prometheus.MustRegister(TotalRequestDC)
 }
