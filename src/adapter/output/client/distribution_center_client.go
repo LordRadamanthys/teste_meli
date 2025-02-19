@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/LordRadamanthys/teste_meli/src/adapter/output/client/response"
+	"github.com/LordRadamanthys/teste_meli/src/configuration/metrics"
 	"gopkg.in/yaml.v2"
 )
 
@@ -18,6 +19,8 @@ func NewDistributionCenterClient() *DistributionCenterClient {
 }
 
 func (d *DistributionCenterClient) FindDistributionCenterByItemId(itemId string) (*response.DistributionCenterResponse, error) {
+
+	metrics.TotalRequestDC.Inc()
 
 	value, ok := d.DistributionCenters[itemId]
 	if !ok {

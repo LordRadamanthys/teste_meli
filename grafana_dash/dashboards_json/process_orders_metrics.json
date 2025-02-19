@@ -1,0 +1,61 @@
+{
+    "dashboard": {
+        "id": null,
+        "title": "Process Orders Metrics",
+        "tags": [],
+        "timezone": "browser",
+        "schemaVersion": 16,
+        "version": 0,
+        "refresh": "5s",
+        "panels": [
+            {
+                "type": "graph",
+                "title": "Order Processing Time",
+                "gridPos": {
+                    "x": 0,
+                    "y": 0,
+                    "w": 24,
+                    "h": 9
+                },
+                "targets": [
+                    {
+                        "refId": "A",
+                        "target": "process_orders_time"
+                    }
+                ]
+            },
+            {
+                "type": "stat",
+                "title": "Total Orders Processed",
+                "gridPos": {
+                    "x": 0,
+                    "y": 9,
+                    "w": 12,
+                    "h": 9
+                },
+                "targets": [
+                    {
+                        "refId": "B",
+                        "target": "total_orders_processed"
+                    }
+                ]
+            },
+            {
+                "type": "stat",
+                "title": "Failed Orders",
+                "gridPos": {
+                    "x": 12,
+                    "y": 9,
+                    "w": 12,
+                    "h": 9
+                },
+                "targets": [
+                    {
+                        "refId": "C",
+                        "target": "failed_orders"
+                    }
+                ]
+            }
+        ]
+    }
+}

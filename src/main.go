@@ -15,6 +15,7 @@ import (
 	"github.com/LordRadamanthys/teste_meli/src/application/service/order"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -34,6 +35,7 @@ func main() {
 	r := gin.New()
 	r.POST("/orders", orderController.ProcessOrder)
 	r.GET("/orders/:orderId", orderController.GetOrder)
+	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	srv := &http.Server{
 		Addr:    os.Getenv("PORT"),

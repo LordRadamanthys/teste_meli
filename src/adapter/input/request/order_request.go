@@ -7,7 +7,7 @@ type OrderRequest struct {
 }
 
 func (or *OrderRequest) ValidateRequest() error {
-	if len(or.Itens) > 1 {
+	if len(or.Itens) > 100 {
 		return errors.New("the number of items cannot exceed 100")
 	}
 

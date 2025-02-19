@@ -7,6 +7,7 @@ import (
 	"github.com/LordRadamanthys/teste_meli/src/application/domain"
 	"github.com/LordRadamanthys/teste_meli/src/application/ports/output"
 	"github.com/LordRadamanthys/teste_meli/src/application/service"
+	"github.com/LordRadamanthys/teste_meli/src/configuration/metrics"
 )
 
 type OrderService struct {
@@ -47,6 +48,6 @@ func (o *OrderService) ProcessOrder(order request.OrderRequest,
 	orderDomain.Itens = tempItens
 
 	id := o.OrdersOutputPort.SaveOrder(orderDomain)
-
+	metrics.OrdersTotal.Inc()
 	return id, nil
 }
