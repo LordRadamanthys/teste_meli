@@ -29,7 +29,7 @@ func main() {
 
 	ordersRepository := repository.NewOrderRepository()
 	distributionCenterClient := client.NewDistributionCenterClient()
-	distributionCenterClient.LoadCDs()
+	distributionCenterClient.LoadCDs("db.yaml")
 	orderService := order.NewOrderService(distributionCenterClient, ordersRepository)
 	orderController := controller.NewOrderController(orderService)
 

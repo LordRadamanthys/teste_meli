@@ -1,0 +1,10 @@
+
+distribution_centers:
+  "123456":
+    - "CD1"
+    - "CD2"
+    - "CD3"
+  "123444":
+    - "CD1"
+    - "CD2"
+    - "CD3"

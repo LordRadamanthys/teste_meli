@@ -32,8 +32,8 @@ func (d *DistributionCenterClient) FindDistributionCenterByItemId(itemId string)
 	}, nil
 }
 
-func (d *DistributionCenterClient) LoadCDs() {
-	data, err := os.ReadFile("db.yaml")
+func (d *DistributionCenterClient) LoadCDs(path string) {
+	data, err := os.ReadFile(path)
 	if err != nil {
 		log.Printf("error: %s - loading CDs from memory", err.Error())
 		d.DistributionCenters = loadFromMemory()
