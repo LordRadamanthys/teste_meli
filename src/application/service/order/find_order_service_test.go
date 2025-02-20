@@ -36,7 +36,7 @@ func TestFindOrder(t *testing.T) {
 				OrderID: "order-1",
 				Items: response.ItemsResponse{
 					ProcessedItems: []response.Item{
-						{ID: "item1", DistributionCenter: []string{"DC1"}},
+						{ID: "item1", DistributionCenters: []string{"DC1"}},
 					},
 					NotProcessedItems: []response.Item{
 						{ID: "item2"},

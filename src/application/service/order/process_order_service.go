@@ -1,7 +1,9 @@
 package order
 
 import (
+	"math/rand"
 	"sync"
+	"time"
 
 	"github.com/LordRadamanthys/teste_meli/src/adapter/input/request"
 	"github.com/LordRadamanthys/teste_meli/src/application/domain"
@@ -42,13 +44,24 @@ func (o *OrderService) ProcessOrder(order request.OrderRequest,
 
 	var tempItems []domain.ItemDomain
 	for item := range resultChan {
+		item.PrimaryDistributionCenter = ChooseRandomCD(item.DistributionCenter)
 		tempItems = append(tempItems, item)
 	}
 
 	orderDomain.Items = tempItems
 
 	id := o.OrdersOutputPort.SaveOrder(orderDomain)
+
 	metrics.ItemsTotal.Add(float64(len(tempItems)))
 	metrics.OrdersTotal.Inc()
 	return id, nil
+}
+
+func ChooseRandomCD(availableCDs []string) string {
+	if len(availableCDs) == 0 {
+		return ""
+	}
+
+	rd := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return availableCDs[rd.Intn(len(availableCDs))]
 }

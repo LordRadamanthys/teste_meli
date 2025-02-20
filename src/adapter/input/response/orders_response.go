@@ -13,8 +13,9 @@ type ItemsResponse struct {
 }
 
 type Item struct {
-	ID                 string   `json:"id"`
-	DistributionCenter []string `json:"distribution_center"`
+	ID                        string   `json:"id"`
+	PrimaryDistributionCenter string   `json:"primary_distribution_center,omitempty"`
+	DistributionCenters       []string `json:"distribution_centers,omitempty"`
 }
 
 func NewResponse(order *repository.OrdersEntity, notProcessedItems []Item,
@@ -27,8 +28,9 @@ func NewResponse(order *repository.OrdersEntity, notProcessedItems []Item,
 			})
 		} else {
 			processedItems = append(processedItems, Item{
-				ID:                 value.ID,
-				DistributionCenter: value.DistributionCenter,
+				ID:                        value.ID,
+				PrimaryDistributionCenter: value.PrimaryDistributionCenter,
+				DistributionCenters:       value.DistributionCenter,
 			})
 		}
 	}

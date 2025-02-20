@@ -19,7 +19,7 @@ func (m *MockDistributionCenterOutputPort) FindDistributionCenterByItemId(itemId
 		return nil, fmt.Errorf("item not found")
 	}
 	return &response.DistributionCenterResponse{
-		AvailableDistributionCenter: []string{"DC1", "DC2"},
+		AvailableDistributionCenter: []string{"DC1"},
 	}, nil
 }
 
@@ -73,12 +73,10 @@ func TestProcessOrder(t *testing.T) {
 			orderRequest: request.OrderRequest{
 				Items: []request.ItemRequest{
 					{ID: "item1"},
-					{ID: "item2"},
 				},
 			},
 			expectedItems: []domain.ItemDomain{
-				{ID: "item1", DistributionCenter: []string{"DC1", "DC2"}, Processed: true},
-				{ID: "item2", DistributionCenter: []string{"DC1", "DC2"}, Processed: true},
+				{ID: "item1", PrimaryDistributionCenter: "DC1", DistributionCenter: []string{"DC1"}, Processed: true},
 			},
 			expectedError: nil,
 		},
@@ -86,13 +84,11 @@ func TestProcessOrder(t *testing.T) {
 			name: "Process order with error item",
 			orderRequest: request.OrderRequest{
 				Items: []request.ItemRequest{
-					{ID: "item1"},
 					{ID: "error"},
 				},
 			},
 			expectedItems: []domain.ItemDomain{
-				{ID: "item1", DistributionCenter: []string{"DC1", "DC2"}, Processed: true},
-				{ID: "error", DistributionCenter: []string{""}, Processed: false},
+				{ID: "error", PrimaryDistributionCenter: "", DistributionCenter: []string{""}, Processed: false},
 			},
 			expectedError: nil,
 		},

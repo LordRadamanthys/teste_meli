@@ -35,8 +35,8 @@ func TestNewResponse(t *testing.T) {
 				OrderID: "order1",
 				Items: ItemsResponse{
 					ProcessedItems: []Item{
-						{ID: "1", DistributionCenter: []string{"DC1"}},
-						{ID: "2", DistributionCenter: []string{"DC2"}},
+						{ID: "1", DistributionCenters: []string{"DC1"}},
+						{ID: "2", DistributionCenters: []string{"DC2"}},
 					},
 					NotProcessedItems: []Item{},
 				},
@@ -60,7 +60,7 @@ func TestNewResponse(t *testing.T) {
 				OrderID: "order2",
 				Items: ItemsResponse{
 					ProcessedItems: []Item{
-						{ID: "2", DistributionCenter: []string{"DC2"}},
+						{ID: "2", DistributionCenters: []string{"DC2"}},
 					},
 					NotProcessedItems: []Item{
 						{ID: "1"},
