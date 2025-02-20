@@ -20,6 +20,8 @@ import (
 )
 
 func main() {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
@@ -40,6 +42,8 @@ func main() {
 	r.GET("/orders/:orderId", orderController.GetOrder)
 	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
+	ordersRepository.LoadSnapshot()
+
 	srv := &http.Server{
 		Addr:    os.Getenv("PORT"),
 		Handler: r,
@@ -53,16 +57,25 @@ func main() {
 
 	log.Printf("Server started on %s", os.Getenv("PORT"))
 
-	gracefullyShutdown(srv, quit)
+	gracefullyShutdown(ctx, cancel, srv, quit, ordersRepository)
 }
 
-func gracefullyShutdown(srv *http.Server, quit chan os.Signal) {
+func gracefullyShutdown(ctx context.Context,
+	cancel context.CancelFunc,
+	srv *http.Server,
+	quit chan os.Signal,
+	ordersRepository *repository.Orders) {
 	<-quit
 	log.Println("Shutting down server...")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-
 	defer cancel()
+
+	log.Println("Waiting 5 seconds to finish processing orders...")
+	time.Sleep(5 * time.Second)
+
+	if err := ordersRepository.SaveSnapshot(); err != nil {
+		log.Fatal("Error saving snapshot:", err)
+	}
 
 	if err := srv.Shutdown(ctx); err != nil {
 		log.Fatal("Server forced to shutdown:", err)

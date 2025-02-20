@@ -43,7 +43,7 @@ func (oc *OrderController) ProcessOrder(c *gin.Context) {
 		return
 	}
 	metrics.OrdersProcessGoroutinesTotal.Set(0)
-	c.JSON(http.StatusCreated, gin.H{"orderId": orderId})
+	c.JSON(http.StatusCreated, gin.H{"order_id": orderId})
 }
 
 func (oc *OrderController) GetOrder(c *gin.Context) {
